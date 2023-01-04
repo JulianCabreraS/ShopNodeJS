@@ -6,7 +6,7 @@ const requestHandler = (req, res)=> {
     const method = req.method;
 
     if (url === '/') {
-        res.write('<html>');
+        res.write('<html lang="en">');
         res.write('<head><title>My first page</title></head>');
         res.write('<body><form action="/message" method="post"><input type="text" name="message"><button type="submit">Send</button> </form></body>');
         res.write('</html>');
@@ -23,7 +23,7 @@ const requestHandler = (req, res)=> {
         return req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString();
             const message = parsedBody.split('=')[1];
-            fs.writeFile('message.txt', message, (err) => {
+            fs.writeFile('message.txt', message, () => {
                 res.statusCode = 302;
                 res.setHeader('Location', '/');
                 return res.end();
