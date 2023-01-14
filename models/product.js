@@ -4,13 +4,11 @@ const p = path.join(path.dirname(process.mainModule.filename), 'data', 'products
 const getProductFromFile = (callBack) => {
 
     fs.readFile(p, (err, fileContent) => {
-
         if (err) {
             return callBack([]);
         } else {
             callBack(JSON.parse(fileContent));
         }
-
     });
 };
 
@@ -24,6 +22,7 @@ module.exports = class {
     }
 
     save() {
+        this.id = Math.random().toString();
         getProductFromFile(products => {
             products.push(this);
             fs.writeFile(p, JSON.stringify(products), (err) => {
@@ -34,6 +33,13 @@ module.exports = class {
 
     static fetchAll(callBack) {
         getProductFromFile(callBack);
+    }
+
+    static findById(id, cb) {
+        getProductFromFile(products => {
+            const product = products.find(p => p.id === id);
+            cb(product)
+        });
     }
 
 };
